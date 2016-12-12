@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+
+<html class="no-js" lang="">
+    <!--<![endif]-->
+
+
+    <head>
+        <meta charset="utf-8">
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+        <title>
+        </title>
+        <meta content="" name="description">
+        <meta content="width=device-width, initial-scale=1" name="viewport">
+        <link href="apple-touch-icon.png" rel="apple-touch-icon">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="css/main.css" rel="stylesheet">
+    <link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+        <script src="js/vendor/angular/angular.js"></script>
+        <script src="js/vendor/angular-resource/angular-resource.js"></script>
+        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+            <script src="js/HomeController.js"></script>
+
+        
+        
+        <link type="text/css" rel="stylesheet" href="css/toastr.css">
+       
+    </head>
+
+    <body  ng-app="content-tool" ng-controller="IndexController">
+
+        <!--[if lt IE 8]>
+                <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+            <![endif]-->
+        <!-- /container -->
+
+        <div class="container">
+
+            <div class="row" >
+                <div class="col-md-5" id="collection-playground" style="overflow-y: scroll;">
+                    <button class="btn btn-success small pull-right" data-target="#add-new-collection-modal" data-toggle="modal">+New</button>
+
+                    <h3>Collections</h3>
+
+
+                    <div class="list-items" ng-init="loadCollection()">
+                        <ol id="collection-list" ng-repeat="collection in allCollection">
+                            <h5 >{{collection.name}}</h5>
+
+                            <button ng-click="edit(collection._id)" class="btn btn-sucess btn-xs" role="button" data-toggle="modal" data-target="#edit-collection">Edit</button>
+                            <!--<button ng-click="fetchObjects(collection._id)" class="btn btn-sucess btn-xs" role="button" data-toggle="modal" data-target="#list-all-objects-modal"></button>-->
+                            <button ng-click="deleteCollection(collection._id,allCollection,$index)" class="btn btn-danger btn-xs" role="button">Delete</button>
+                            <hr>
+                        </ol>
+
+                    </div>
+
+                    
+                </div>
+
+
+                <div class="col-md-5 col-md-offset-1" id="templates-playground">
+                    <button class="btn btn-success small pull-right" data-target="#new-template-input-modal" data-toggle="modal">+New</button>
+
+                    <h3>Templates</h3>
+                    <div class="template-items">
+                        <ol id="template-list">
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+            </div>
+            
+                  
+            
+  <div class="modal fade" id="delete-item-modal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" id="delete-title"></h4>
+        </div>
+        <div class="modal-body">
+            <h3 id="delete-message"></h3>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger btn-confirm-delete" data-dismiss="modal">Delete</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+            <div class="modal fade" id="new-template-input-modal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+                            <h4 class="modal-title">Add a new template</h4>
+                        </div>
+
+
+                        <div class="modal-body">
+                            
+                            <div class="form-group">
+                                <label for="input-template-name">Enter template name</label>
+                                <input id="input-template-name" type="text" class="form-control input-group-sm">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="textarea-template-data">Enter a template</label>
+
+                                <textarea class="form-control" id="textarea-template-data" style="min-width: 100%"></textarea>
+                            </div>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                            <button  id="btn-add-new-template" class="btn btn-primary" type="button">Add new template</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal fade" id="add-new-collection-modal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+
+                            <h4 class="modal-title">Enter your collection name</h4>
+                        </div>
+
+
+                        <div class="modal-body">
+
+
+                            <form  class="form-horizontal"  >
+                                <div class="form-group">
+                                    <div class="col-sm-10">
+                                        <input class="form-control" id="name" ng-model="name" placeholder="Enter your collection" required="" type="text">
+                                    </div>
+                                </div>
+                                <button  href="" class="btn btn-primary"  id= "btn-add-new-collection" type="submit" ng-click="newCollection()" data-dismiss="modal">Add new collection</button>
+                            </form>
+
+                        </div>
+
+
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+                <div class="modal fade" id="add-new-object-to-collection" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+
+                            <h4 id="add-object-header" class="modal-title"></h4>
+                        </div>
+
+
+                        <div class="modal-body">
+                           
+                            <div id="sortable"></div>
+                               
+                      
+                        </div>
+
+
+                        <div class="modal-footer">
+                             <button class="btn btn-primary"  id= "btn-add-new-object" type="submit">Add object </button>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal fade" id="new-collection-input-modal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+
+                            <h4 class="modal-title">Add a new template</h4>
+                        </div>
+
+
+                        <div class="modal-body">
+
+
+                            <div class="modal-footer">
+                                <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                                <button class="btn btn-primary" type="button">Add new collection</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      <div class="modal fade" id="edit-each-object-modal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+
+                            <h4  class="modal-title">Edit Object</h4>
+                        </div>
+
+                        <div class="modal-body">
+                           
+                       <div class="sortable">
+                       </div>
+
+
+                        <div class="modal-footer">
+                             <button class="btn btn-primary"  id= "btn-edit-object-save" type="submit">Save Changes </button>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+            <div class="modal fade" id="edit-collection" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" data-dismiss="modal" type="button">&times</button>
+
+                            <h4  class="modal-title">Edit Collection</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <a class="btn btn-info btn-xs" data-toggle="collapse" href="#editColletionName" aria-expanded="false" aria-controls="collapseExample">
+                                Edit Collection Name
+                            </a>
+                            <div class="collapse" id="editColletionName">
+                            Enter New Name
+                            <input ng-model="editedName" type="text" class="form-control input-group-sm">
+                                <button class="btn btn-primary"  id= "saveCollection" data-dismiss="modal" type="submit" ng-click="editCollection()">Save Changes </button>
+                                </div>
+                            <div id="each-object" ng-repeat="object in  objectData">
+
+                                <ol>
+                                    Title: {{object.title}}<br>
+                                    Src: {{object.src}}<br>
+                                    ...<br>
+                                    <button  class="btn btn-sucess btn-xs"  data-dismiss="modal" ng-click="objectId(object._id)" data-target="#edit-each-object-modal" data-toggle="modal">Edit</button>
+                                    <button  class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#">Edit</button>
+                                    <hr>
+                                </ol>
+
+                            </div>
+                            <div class="modal-footer">
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            
+                  <div class="modal fade" id="edit-template-modal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+
+                            <h4  class="modal-title">Edit template</h4>
+                        </div>
+
+
+                        <div class="modal-body">
+                            <div id="template-edit">
+                                
+                                
+                            </div>
+                     
+
+
+                        <div class="modal-footer">
+                             <button class="btn btn-primary"  id= "btn-edit-template-save" type="submit">Save Changes </button>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+            
+            
+            
+            <div class="modal fade" id="list-all-objects-modal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+
+                            <h4 id="edit-collection-header" class="modal-title">Edit or delete objects in a collection</h4>
+                    </div>
+                        
+                        <div class="modal-body">
+                            
+
+                            
+                        </div>
+                        
+                   
+                    <div class="modal-footer">
+                        
+                        
+                        
+                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                     </div>
+                </div>
+                
+                
+            </div>
+
+
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+            </script>
+            <script>
+                window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>');
+            </script>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js">
+            </script>
+            <script src="js/vendor/bootstrap.min.js">
+            </script>
+             <script src="js/vendor/toastr.js"  type="text/javascript"></script>
+            <!--<script src="js/main.js">-->
+            <!--</script>-->
+       
+    </body>
+
+</html>

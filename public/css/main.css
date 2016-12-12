@@ -1,0 +1,45 @@
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+#templates-playground, #collection-playground{
+    
+    border: 1px solid black;
+     height: 500px;
+    background-color: #f8f8f8;
+}
+
+#templates-playground h3, #collection-playground h3{
+    text-align: center; 
+}
+#templates-playground button, #collection-playground button{
+    
+    margin-top: 10px;
+ 
+}
+.btn-delete-collection, .btn-edit-collection{
+    
+    
+}
+
+#collection-list button{
+    
+    margin-top: -2px;
+}
+#collection-list li{
+    margin-top: 10px;
+}
+
+#edit-collection-modal .modal-body{
+    
+    height: 100%;
+    
+    
+    
+}
+#each-object ol li{
+    
+    
+    margin-top: 10px;
+}
