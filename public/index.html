@@ -60,9 +60,9 @@
 
                     <div class="list-items" ng-init="loadCollection()">
                         <ol id="collection-list" ng-repeat="collection in allCollection">
-                            <h5 >{{collection.name}}</h5>
-
-                            <button ng-click="edit(collection._id)" class="btn btn-sucess btn-xs" role="button" data-toggle="modal" data-target="#edit-collection">Edit</button>
+                            <span class="badge">{{$index+1}}</span>  {{collection.name}}
+                            <br><br>
+                            <button ng-click="edit(collection._id,collection.name)" class="btn btn-sucess btn-xs" role="button" data-toggle="modal" data-target="#edit-collection">Edit</button>
                             <button ng-click="deleteCollection(collection._id,allCollection,$index)" class="btn btn-danger btn-xs" role="button">Delete</button>
                             <hr>
                         </ol>
@@ -79,8 +79,9 @@
                     <h3>Templates</h3>
                     <div class="template-items">
                         <ol id="template-list" ng-repeat="template in templateObj">
-                             Name: {{template.name}}<br>
-                            <button  class="btn btn-sucess btn-xs"   data-toggle="modal" data-target="#edit-template-modal" href="#"   ng-click="templateID(template._id)">Edit</button>
+                            <span class="badge">{{$index+1}}</span></a>
+                            {{template.name}}<br>
+                            <button  class="btn btn-sucess btn-xs"   data-toggle="modal" data-target="#edit-template-modal" href="#"   ng-click="templateID(template._id,template.name)">Edit</button>
                             <button  class="btn btn-danger btn-xs"   ng-click="deleteTemplate(template._id,templateObj,$index)">Delete</button>
                             <hr>
                         </ol>
@@ -136,7 +137,7 @@
 
                                 <textarea class="form-control"  ng-model="template" id="textarea-template-data" style="min-width: 100%"></textarea>
                             </div>
-                            {{template}}
+
                         </div>
 
 
@@ -206,38 +207,13 @@
                     </div>
                 </div>
             </div>
-      <div class="modal fade" id="edit-each-object-modal" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button class="close" data-dismiss="modal" type="button">&times;</button>
 
-                            <h4  class="modal-title">Edit Object</h4>
-                        </div>
-
-                        <div class="modal-body">
-
-                       <div id="sortable">
-                           <div class="form-group"  ng-repeat="(x,y) in object" >
-                                       <label for="{{x}}">{{x}}:</label>
-                                       <input type="text" class="form-control" id="{{x}}"  >
-                                   </div>
-                       </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="editObject()">Ok</button>
-                             <button class="btn btn-primary" data-dismiss="modal" id= "btn-edit-object-save" >Cancel </button>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-    </div>
             <div class="modal fade" id="edit-collection" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button class="close" data-dismiss="modal" type="button">&times</button>
+                            <h5>{{collectionName|uppercase}}</h5>
+                            <button class="close" data-dismiss="modal" type="submit" >&times</button>
 
                             <h4  class="modal-title">Edit Collection</h4>
                         </div>
@@ -249,17 +225,17 @@
                             <button  class="btn btn-info btn-xs"  data-toggle="modal" data-target="#list-all-objects-modal"  href="#" style="float:right;">Add new Object</button>
                             <button  class="btn btn-info btn-xs"  data-toggle="modal" data-target="#all-template-modal"  href="#" style="float:right;">Pick a Template</button>
                             <div class="collapse" id="editCollectionName">
-                            Enter New Name
-                            <input ng-model="editedName" type="text" class="form-control input-group-sm">
-                                <button class="btn btn-primary"  id= "saveCollection" data-dismiss="modal" type="submit" ng-click="editCollection()">Save Changes </button>
-                                </div>
+                                Enter New Name
+                                <input ng-model="editedName" type="text" class="form-control input-group-sm">
+                                <button class="btn btn-info btn-sm"  id= "saveCollection" data-toggle="collapse"  type="submit" ng-click="editCollection()">Save Changes </button>
+                            </div>
                             <div id="each-object" ng-repeat="object in  objectData">
-
+                                <span class="badge">{{$index+1}}</span></a>
                                 <ol>
                                     Title: {{object.title}}<br>
                                     Src: {{object.src}}<br>
                                     ...<br>
-                                    <button  class="btn btn-sucess btn-xs"   data-toggle="modal" data-target="#edit-each-object-modal" href="#"   ng-click="objectId(object._id)">Edit</button>
+                                    <button  class="btn btn-sucess btn-xs"   data-toggle="modal" data-target="#edit-each-object-modal" href="#"   ng-click="objectIdset(object._id,$index)">Edit</button>
                                     <button  class="btn btn-danger btn-xs"   ng-click="deleteObject(object._id,objectData,$index)">Delete</button>
                                     <hr>
                                 </ol>
@@ -275,6 +251,7 @@
 
             </div>
 
+
             <div class="modal fade" id="all-template-modal" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -287,7 +264,7 @@
 
                         <div class="modal-body">
                            <div ng-repeat="template in templateObj">
-                                <a href="#"   data-toggle="modal" data-target="#edit-template-modal" ng-click="renderObjectInTemplate(template._id)">{{template.name|uppercase}}</a>
+                                <a href="#"   data-toggle="modal" data-target="#renderingModal" ng-click="renderObjectInTemplate(template._id,template.name)"><span class="badge">{{$index+1}}</span>{{template.name|uppercase}}</a>
 
 
 
@@ -304,12 +281,71 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="edit-each-object-modal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+
+                            <h4  class="modal-title">Edit Object</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <div id="sortable">
+                                <div class="form-group"  ng-repeat="(x,y) in object" >
+
+                                    <label for="{{x}}">{{x}}:</label>
+                                    <input type="text" class="form-control" id="{{x}}"  >
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="editObject()">Ok</button>
+                                <button class="btn btn-primary" data-dismiss="modal" id= "btn-edit-object-save" >Cancel </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal fade" id="renderingModal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            {{templateRender}}
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+
+                            <h4  class="modal-title">All objects</h4>
+                        </div>
+
+
+                        <div class="modal-body">
+                            <div ng-repeat="object in objectData">
+                                <span class="badge">{{$index+1}}</span></a>
+                                <div ng-repeat="(x,y) in object">
+                             <p ng-if="!(x=='_id' || x=='collectionId'||x=='__v')">{{x}}: {{y}}</p>
+                                    </div>
+                                        </div>
+                            </div>
+                            <hr>
+                        </div>
+
+
+
+                        <div class="modal-footer">
+                            <button class="btn btn-primary"  data-dismiss="modal">Back </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             
                   <div class="modal fade" id="edit-template-modal" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
+                            <h6>{{templateName || uppercase}}</h6>
                             <button class="close" data-dismiss="modal" type="button">&times;</button>
 
                             <h4  class="modal-title">Edit template</h4>
@@ -389,8 +425,6 @@
             </script>
 
 
-            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
-            </script>
             <script>
                 window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')
             </script>

@@ -64,3 +64,6 @@ body {
 
 .as-sortable-hidden {
 }
+.modal-body{
+    overflow-y: scroll;
+}

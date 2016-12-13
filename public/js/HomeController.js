@@ -1,6 +1,4 @@
-/**
- * Created by The BigBang on 11.12.2016.
- */
+
 
 $( function() {
     $( "#sortable" ).sortable();
@@ -8,10 +6,15 @@ $( function() {
     $( "#sortable_1" ).sortable();
     $( "#sortable_1" ).disableSelection();
 } );
+function defaultValueSet(fieldsObj){
+    for(key in fieldsObj){
+        $("#"+key).val(fieldsObj[key]);
+    }
+
+}
 
 
 var app=angular.module('content-tool',[])
-
 
     app.controller('IndexController', ['$scope','$http', function($scope, $http) {
         $scope.list = ["one", "two", "three", "four", "five", "six"];
@@ -64,8 +67,9 @@ var app=angular.module('content-tool',[])
         }
 
 
-        $scope.edit=function(collectionId) {
+        $scope.edit=function(collectionId,collectionName) {
             $scope.collectionId = collectionId;
+            $scope.collectionName=collectionName;
             $http.get('/objectEvents/?collectionId='+ collectionId).then(function(data){
                 $scope.objectData=data.data;
                 console.log(data);
@@ -117,8 +121,11 @@ var app=angular.module('content-tool',[])
                 throw err;
             })
         }
-        $scope.objectId=function(objectId){
+        $scope.objectIdset=function(objectId,$index){
             $scope.objectId=objectId;
+            $scope.index=$index;
+            //defaultValueSet($scope.objectData[$index]);
+
 
         }
         $scope.editObject=function(){
@@ -161,8 +168,9 @@ var app=angular.module('content-tool',[])
 
 
         }
-        $scope.templateID=function(templateId){
+        $scope.templateID=function(templateId,templateName){
             $scope.templateId=templateId;
+            $scope.templateName=templateName;
 
         }
         $scope.editTemplate=function(){
@@ -174,11 +182,12 @@ var app=angular.module('content-tool',[])
                 throw err;
             })
         }
-        $scope.renderObjectInTemplate=function(templateId){
+        $scope.renderObjectInTemplate=function(templateId,templateName){
+            $scope.templateRender=templateName;
             console.log(templateId);
             $http.get('/templateEvents/getTemplate/?templateId='+templateId).then(function(templateObject){
                 console.log(templateObject);
-              $scope.templateToRender=templateObject.data[0];
+              $scope.templateToRender=templateObject.data[0].template;
                 console.log($scope.templateToRender);
                 console.log($scope.objectData);
             },function(err){
@@ -186,6 +195,7 @@ var app=angular.module('content-tool',[])
             })
 
         }
+
 
     }]);
 
