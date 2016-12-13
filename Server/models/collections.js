@@ -29,9 +29,17 @@ var collectionSchema=new mongoose.Schema({
     name:String
 });
 
+var templateSchema=new mongoose.Schema({
+    name:String,
+    template:String
+
+});
+
 
 var collectionSchema=mongoose.model('Collection',collectionSchema);
 var objSchema=mongoose.model('Object',objSchema);
+var templateSchema=mongoose.model("Template",templateSchema);
 
 module.exports.collectionSchema = collectionSchema;
 module.exports.objSchema = objSchema;
+module.exports.templateSchema = templateSchema;

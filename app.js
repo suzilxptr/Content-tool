@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose=require('mongoose');
 var collections = require('./Server/routes/collection');
 var objects = require('./Server/routes/object');
+var template = require('./Server/routes/template');
 
 var app = express();
 // view engine setup
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //route handler for collections and objects
 app.use('/collectionEvents', collections);
 app.use('/objectEvents', objects);
+app.use('/templateEvents', template);
 
 //database connection
 mongoose.connect('mongodb://localhost/collectionObjects');

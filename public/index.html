@@ -4,7 +4,7 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
 <!--[if gt IE 8]><!-->
 
-<html class="no-js" lang="">
+<html class="no-js" lang="" xmlns:ui="http://www.w3.org/1999/xhtml">
     <!--<![endif]-->
 
 
@@ -24,15 +24,25 @@
         <script src="js/vendor/angular/angular.js"></script>
         <script src="js/vendor/angular-resource/angular-resource.js"></script>
         <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+
+
             <script src="js/HomeController.js"></script>
 
-        
-        
+
         <link type="text/css" rel="stylesheet" href="css/toastr.css">
        
     </head>
 
     <body  ng-app="content-tool" ng-controller="IndexController">
+
+
+
+
 
         <!--[if lt IE 8]>
                 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -53,7 +63,6 @@
                             <h5 >{{collection.name}}</h5>
 
                             <button ng-click="edit(collection._id)" class="btn btn-sucess btn-xs" role="button" data-toggle="modal" data-target="#edit-collection">Edit</button>
-                            <!--<button ng-click="fetchObjects(collection._id)" class="btn btn-sucess btn-xs" role="button" data-toggle="modal" data-target="#list-all-objects-modal"></button>-->
                             <button ng-click="deleteCollection(collection._id,allCollection,$index)" class="btn btn-danger btn-xs" role="button">Delete</button>
                             <hr>
                         </ol>
@@ -64,12 +73,16 @@
                 </div>
 
 
-                <div class="col-md-5 col-md-offset-1" id="templates-playground">
-                    <button class="btn btn-success small pull-right" data-target="#new-template-input-modal" data-toggle="modal">+New</button>
+                <div class="col-md-5 col-md-offset-1" id="templates-playground" ng-init="loadTemplate()">
+                    <button class="btn btn-success small pull-right" data-target="#new-template-input-modal" data-toggle="modal" >+New</button>
 
                     <h3>Templates</h3>
                     <div class="template-items">
-                        <ol id="template-list">
+                        <ol id="template-list" ng-repeat="template in templateObj">
+                             Name: {{template.name}}<br>
+                            <button  class="btn btn-sucess btn-xs"   data-toggle="modal" data-target="#edit-template-modal" href="#"   ng-click="templateID(template._id)">Edit</button>
+                            <button  class="btn btn-danger btn-xs"   ng-click="deleteTemplate(template._id,templateObj,$index)">Delete</button>
+                            <hr>
                         </ol>
                     </div>
                 </div>
@@ -102,7 +115,6 @@
     </div>
   </div>
 
-
             <div class="modal fade" id="new-template-input-modal" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -116,20 +128,21 @@
                             
                             <div class="form-group">
                                 <label for="input-template-name">Enter template name</label>
-                                <input id="input-template-name" type="text" class="form-control input-group-sm">
+                                <input id="input-template-name" type="text" class="form-control input-group-sm" ng-model="name">
                             </div>
                             
                             <div class="form-group">
                                 <label for="textarea-template-data">Enter a template</label>
 
-                                <textarea class="form-control" id="textarea-template-data" style="min-width: 100%"></textarea>
+                                <textarea class="form-control"  ng-model="template" id="textarea-template-data" style="min-width: 100%"></textarea>
                             </div>
+                            {{template}}
                         </div>
 
 
                         <div class="modal-footer">
                             <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
-                            <button  id="btn-add-new-template" class="btn btn-primary" type="button">Add new template</button>
+                            <button  id="btn-add-new-template" data-dismiss="modal" class="btn btn-primary"  ng-click="addTemplate()">Add new template</button>
                         </div>
                     </div>
                 </div>
@@ -169,31 +182,7 @@
             </div>
             
             
-                <div class="modal fade" id="add-new-object-to-collection" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button class="close" data-dismiss="modal" type="button">&times;</button>
 
-                            <h4 id="add-object-header" class="modal-title"></h4>
-                        </div>
-
-
-                        <div class="modal-body">
-                           
-                            <div id="sortable"></div>
-                               
-                      
-                        </div>
-
-
-                        <div class="modal-footer">
-                             <button class="btn btn-primary"  id= "btn-add-new-object" type="submit">Add object </button>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
 
 
             <div class="modal fade" id="new-collection-input-modal" role="dialog">
@@ -227,13 +216,16 @@
                         </div>
 
                         <div class="modal-body">
-                           
-                       <div class="sortable">
+
+                       <div id="sortable">
+                           <div class="form-group"  ng-repeat="(x,y) in object" >
+                                       <label for="{{x}}">{{x}}:</label>
+                                       <input type="text" class="form-control" id="{{x}}"  >
+                                   </div>
                        </div>
-
-
                         <div class="modal-footer">
-                             <button class="btn btn-primary"  id= "btn-edit-object-save" type="submit">Save Changes </button>
+                            <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="editObject()">Ok</button>
+                             <button class="btn btn-primary" data-dismiss="modal" id= "btn-edit-object-save" >Cancel </button>
                             
                         </div>
                     </div>
@@ -251,10 +243,12 @@
                         </div>
 
                         <div class="modal-body">
-                            <a class="btn btn-info btn-xs" data-toggle="collapse" href="#editColletionName" aria-expanded="false" aria-controls="collapseExample">
+                            <a class="btn btn-info btn-xs" data-toggle="collapse"  data-target="#editCollectionName" aria-expanded="false" aria-controls="collapseExample">
                                 Edit Collection Name
                             </a>
-                            <div class="collapse" id="editColletionName">
+                            <button  class="btn btn-info btn-xs"  data-toggle="modal" data-target="#list-all-objects-modal"  href="#" style="float:right;">Add new Object</button>
+                            <button  class="btn btn-info btn-xs"  data-toggle="modal" data-target="#all-template-modal"  href="#" style="float:right;">Pick a Template</button>
+                            <div class="collapse" id="editCollectionName">
                             Enter New Name
                             <input ng-model="editedName" type="text" class="form-control input-group-sm">
                                 <button class="btn btn-primary"  id= "saveCollection" data-dismiss="modal" type="submit" ng-click="editCollection()">Save Changes </button>
@@ -265,14 +259,14 @@
                                     Title: {{object.title}}<br>
                                     Src: {{object.src}}<br>
                                     ...<br>
-                                    <button  class="btn btn-sucess btn-xs"  data-dismiss="modal" ng-click="objectId(object._id)" data-target="#edit-each-object-modal" data-toggle="modal">Edit</button>
-                                    <button  class="btn btn-danger btn-xs"  data-toggle="modal" data-target="#">Edit</button>
+                                    <button  class="btn btn-sucess btn-xs"   data-toggle="modal" data-target="#edit-each-object-modal" href="#"   ng-click="objectId(object._id)">Edit</button>
+                                    <button  class="btn btn-danger btn-xs"   ng-click="deleteObject(object._id,objectData,$index)">Delete</button>
                                     <hr>
                                 </ol>
 
                             </div>
                             <div class="modal-footer">
-
+                                <button class="btn btn-primary"  data-dismiss="modal" type="submit" >Cancel </button>
 
                             </div>
                         </div>
@@ -280,7 +274,37 @@
                 </div>
 
             </div>
-            
+
+            <div class="modal fade" id="all-template-modal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+
+                            <h4  class="modal-title">Pick template</h4>
+                        </div>
+
+
+                        <div class="modal-body">
+                           <div ng-repeat="template in templateObj">
+                                <a href="#"   data-toggle="modal" data-target="#edit-template-modal" ng-click="renderObjectInTemplate(template._id)">{{template.name|uppercase}}</a>
+
+
+
+                           </div>
+
+                        </div>
+
+
+
+                        <div class="modal-footer">
+                            <button class="btn btn-primary"  data-dismiss="modal"  type="submit" >Cancel </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             
                   <div class="modal fade" id="edit-template-modal" role="dialog">
                 <div class="modal-dialog">
@@ -294,14 +318,24 @@
 
                         <div class="modal-body">
                             <div id="template-edit">
-                                
+                                <div class="form-group">
+                                    <label for="input-template-name">Enter template name</label>
+                                    <input  type="text" class="form-control input-group-sm" ng-model="editName">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="textarea-template-data">Enter a template</label>
+
+                                    <textarea class="form-control"  ng-model="edittedTemplate"  style="min-width: 100%"></textarea>
+                                </div>
+                            </div>
                                 
                             </div>
                      
 
 
                         <div class="modal-footer">
-                             <button class="btn btn-primary"  id= "btn-edit-template-save" type="submit">Save Changes </button>
+                             <button class="btn btn-primary"  data-dismiss="modal" id= "btn-edit-template-save" type="submit" ng-click="editTemplate()">Save Changes </button>
                             
                         </div>
                     </div>
@@ -309,7 +343,8 @@
             </div>
 
     </div>
-            
+
+
             
             
             <div class="modal fade" id="list-all-objects-modal" role="dialog">
@@ -318,33 +353,46 @@
                     <div class="modal-header">
                             <button class="close" data-dismiss="modal" type="button">&times;</button>
 
-                            <h4 id="edit-collection-header" class="modal-title">Edit or delete objects in a collection</h4>
+                            <h4 id="edit-collection-header" class="modal-title">Add object/h4>
                     </div>
                         
                         <div class="modal-body">
-                            
-
-                            
+                                    <div id="sortable_1">
+                                             <div class="form-group"  ng-repeat="(x,y) in object" >
+                                            <div> <label for="{{x}}">{{x}}:</label>
+                                             <input type="text" class="form-control" id="{{x}}"  /></div>
+                                     </div>
+                                    </div>
                         </div>
                         
                    
                     <div class="modal-footer">
-                        
-                        
-                        
+                        <button type="button" class="btn btn-info"  data-dismiss="modal" ng-click="addObject()">Ok</button>
                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div>
                      </div>
                 </div>
+
                 
                 
             </div>
+            <script>
+                $(".modal-dialog").draggable({
+                    handle: ".modal-header"
+                });
+                $( "form" ).on( "submit", function( event ) {
+                    event.preventDefault();
+                    console.log("herer");
+                    console.log( $( this ).serialize() );
+                });
+
+            </script>
 
 
             <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
             </script>
             <script>
-                window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>');
+                window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')
             </script>
             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js">
             </script>
