@@ -182,14 +182,28 @@ var app=angular.module('content-tool',[])
                 throw err;
             })
         }
+
         $scope.renderObjectInTemplate=function(templateId,templateName){
+            var allObjectsJson={};
+            var eachObjs=[];
             $scope.templateRender=templateName;
             console.log(templateId);
             $http.get('/templateEvents/getTemplate/?templateId='+templateId).then(function(templateObject){
                 console.log(templateObject);
-              $scope.templateToRender=templateObject.data[0].template;
-                console.log($scope.templateToRender);
+                console.log(templateObject.data[0].template);
+              $scope.templateToRender=JSON.parse(templateObject.data[0].template);
                 console.log($scope.objectData);
+
+                angular.forEach(($scope.objectData), function(obj){
+
+                      angular.forEach($scope.templateToRender,function(key,value){
+                          allObjectsJson[value]=obj[value];
+                  })
+                    eachObjs.push(allObjectsJson);
+                 })
+                console.log(allObjectsJson);
+                $scope.allobjs=eachObjs;
+                $('#renderedInTemplate').append(allObjectsJson);
             },function(err){
                 throw err;
             })

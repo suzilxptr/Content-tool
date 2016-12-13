@@ -320,13 +320,10 @@
 
 
                         <div class="modal-body">
-                            <div ng-repeat="object in objectData">
-                                <span class="badge">{{$index+1}}</span></a>
-                                <div ng-repeat="(x,y) in object">
-                             <p ng-if="!(x=='_id' || x=='collectionId'||x=='__v')">{{x}}: {{y}}</p>
-                                    </div>
-                                        </div>
-                            </div>
+
+                                <textarea rows="10" cols="75"  id="renderedInTemplate" >
+                                    {{allobjs}}
+</textarea>
                             <hr>
                         </div>
 
