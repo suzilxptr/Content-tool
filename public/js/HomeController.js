@@ -8,12 +8,7 @@ $( function() {
 
 } );
 
-function defaultValueSet(fieldsObj){
-    for(key in fieldsObj){
-        $("#"+key).val(fieldsObj[key]);
-    }
 
-}
 
 
 var app=angular.module('content-tool',['ui.sortable'])
@@ -48,6 +43,7 @@ var app=angular.module('content-tool',['ui.sortable'])
             })
 
         }
+
         $scope.newCollection=function(event){
 
             $http.post('/collectionEvents',{name:$scope.name}).then(function(obj){
@@ -59,7 +55,16 @@ var app=angular.module('content-tool',['ui.sortable'])
             $scope.name="";
         }
 
-        $scope.editCollection=function(){
+       function sort(){
+           $http.post('objectEvents/edit/sort',$scope.objectData).then(function(data){
+
+           },function(err){
+               throw err;
+           })
+       }
+
+
+       $scope.editCollection=function(){
             $http.post('/collectionEvents/edit',{name:$scope.editedName,collectionId:$scope.collectionId}).then(function(obj){
               $scope.loadCollection();
             },function(err){
@@ -164,9 +169,16 @@ var app=angular.module('content-tool',['ui.sortable'])
 
 
         }
-        $scope.templateID=function(templateId,templateName){
+       $scope.sortableOptions = {
+           // called after a node is dropped
+           stop: function(e, ui) {
+                sort();
+           }
+       };
+        $scope.templateID=function(templateId,templateName,template){
             $scope.templateId=templateId;
             $scope.templateName=templateName;
+            $scope.edittedTemplate=template;
 
         }
         $scope.editTemplate=function(){
@@ -180,24 +192,20 @@ var app=angular.module('content-tool',['ui.sortable'])
 
         $scope.renderObjectInTemplate=function(templateId,templateName){
             $scope.allobjs="";
-
-            var allObjectsJson={};
             var eachObjs=[];
             $scope.templateRender=templateName;
             $http.get('/templateEvents/getTemplate/?templateId='+templateId).then(function(templateObject){
-
-              $scope.templateToRender=JSON.parse(templateObject.data[0].template);
-                console.log($scope.objectData);
-
+              $scope.templateToRender=templateObject.data[0].template;
                 angular.forEach(($scope.objectData), function(obj){
-
-                      angular.forEach($scope.templateToRender,function(key,value){
-                          allObjectsJson[value]=obj[value];
-                  })
-                    eachObjs.push(allObjectsJson);
+                    var template=$scope.templateToRender;
+                                angular.forEach(obj,function(key,value){
+                                   var s=value.toUpperCase();
+                                    template=template.replace("{{"+s+"}}", key);
+                                })
+                                eachObjs.push(template);
                  })
+
                 $scope.allobjs=eachObjs;
-               // $('#renderedInTemplate').append(allObjectsJson);
             },function(err){
                 throw err;
             })
@@ -205,13 +213,7 @@ var app=angular.module('content-tool',['ui.sortable'])
         }
 
 
-        $scope.sort=function(){
-            $http.post('objectEvents/edit/sort',$scope.objectData).then(function(data){
-                alert("Sorted");
-            },function(err){
-                throw err;
-            })
-        }
+
 
 
     }]);

@@ -81,7 +81,7 @@
 
                     
                 </div>
-
+{{template}}
 
                 <div class="col-md-5 col-md-offset-1" id="templates-playground" ng-init="loadTemplate()">
                     <button class="btn btn-success small pull-right" data-target="#new-template-input-modal" data-toggle="modal" >+New</button>
@@ -91,7 +91,7 @@
                         <ol id="template-list" ng-repeat="template in templateObj">
                             <span class="badge">{{$index+1}}</span></a>
                             {{template.name}}<br>
-                            <button  class="btn btn-sucess btn-xs"   data-toggle="modal" data-target="#edit-template-modal" href="#"   ng-click="templateID(template._id,template.name)">Edit</button>
+                            <button  class="btn btn-sucess btn-xs"   data-toggle="modal" data-target="#edit-template-modal" href="#"   ng-click="templateID(template._id,template.name,template.template)">Edit</button>
                             <button  class="btn btn-danger btn-xs"   ng-click="deleteTemplate(template._id,templateObj,$index)">Delete</button>
                             <hr>
                         </ol>
@@ -255,7 +255,6 @@
 
                             </div>
                                     </ul>
-                                <button class="btn btn-sucess btn-xs" type="button" ng-click="sort()">Sort</button>
                                 </div>
                             <div class="modal-footer">
                                 <button class="btn btn-primary"  data-dismiss="modal" type="submit" >Cancel </button>
@@ -353,7 +352,7 @@
                 </div>
             </div>
 
-            
+
                   <div class="modal fade" id="edit-template-modal" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -375,7 +374,7 @@
                                 <div class="form-group">
                                     <label for="textarea-template-data">Enter a template</label>
 
-                                    <textarea class="form-control"  ng-model="edittedTemplate"  style="min-width: 100%"></textarea>
+                                    <textarea class="form-control"  ng-model="edittedTemplate" ></textarea>
                                 </div>
                             </div>
                                 
