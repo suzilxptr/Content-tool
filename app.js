@@ -29,7 +29,7 @@ app.use('/objectEvents', objects);
 app.use('/templateEvents', template);
 
 //database connection
-mongoose.connect('mongodb://localhost/collectionObjects');
+mongoose.connect('mongodb://root:root@ds133428.mlab.com:33428/content-tool');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
