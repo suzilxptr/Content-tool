@@ -5,7 +5,9 @@ $( function() {
     $( "#sortable" ).disableSelection();
     $( "#sortable_1" ).sortable();
     $( "#sortable_1" ).disableSelection();
+
 } );
+
 function defaultValueSet(fieldsObj){
     for(key in fieldsObj){
         $("#"+key).val(fieldsObj[key]);
@@ -14,19 +16,19 @@ function defaultValueSet(fieldsObj){
 }
 
 
-var app=angular.module('content-tool',[])
+var app=angular.module('content-tool',['ui.sortable'])
 
-    app.controller('IndexController', ['$scope','$http', function($scope, $http) {
+   app.controller('IndexController', ['$scope','$http', function($scope, $http) {
         $scope.list = ["one", "two", "three", "four", "five", "six"];
         $scope.loadCollection=function(){
             $http.get('/collectionEvents').then(function(data){
                $scope.allCollection=data.data;
-                console.log(data);
             },function(err){
                 throw err;
             });
 
         }
+
         $scope.loadTemplate=function(){
             $http.get('/templateEvents').then(function(templateObject){
                 $scope.templateObj=templateObject.data;
@@ -72,8 +74,6 @@ var app=angular.module('content-tool',[])
             $scope.collectionName=collectionName;
             $http.get('/objectEvents/?collectionId='+ collectionId).then(function(data){
                 $scope.objectData=data.data;
-                console.log(data);
-
             },function(err){
                 throw err;
             })
@@ -81,7 +81,6 @@ var app=angular.module('content-tool',[])
         $scope.deleteObject=function(objectId,array,index){
 
             $http.get('/objectEvents/delete/?objectId='+ objectId).then(function(data){
-                console.log(data);
                 array.splice(index,1);
 
             },function(err){
@@ -115,6 +114,7 @@ var app=angular.module('content-tool',[])
                 currentObject[this.id] = $(value).val();
             });
                currentObject.collectionId=$scope.collectionId;
+            currentObject.index=null;
             $http.post('/objectEvents',currentObject).then(function(obj){
                 $scope.objectData.push(obj.data.data);
             },function(err){
@@ -135,10 +135,7 @@ var app=angular.module('content-tool',[])
             });
 
             currentObject.objectId=$scope.objectId;
-            for(item in currentObject){
-                console.log(item);
-            }
-            console.log("The object id is"+currentObject.objectId);
+            for(item in currentObject){}
             $http.post('/objectEvents/edit',currentObject).then(function(data){
                 console.log(data);
             },function(err){
@@ -159,7 +156,6 @@ var app=angular.module('content-tool',[])
         $scope.deleteTemplate=function(templateId,array,index){
 
             $http.get('/templateEvents/delete/?templateId='+ templateId).then(function(data){
-                console.log(data);
                 array.splice(index,1);
 
             },function(err){
@@ -176,7 +172,6 @@ var app=angular.module('content-tool',[])
         $scope.editTemplate=function(){
 
             $http.post('/templateEvents/edit',{"templateId":$scope.templateId,"name":$scope.editName,"template":$scope.edittedTemplate}).then(function(data){
-                console.log(data);
                 $scope.loadTemplate();
             },function(err){
                 throw err;
@@ -184,13 +179,13 @@ var app=angular.module('content-tool',[])
         }
 
         $scope.renderObjectInTemplate=function(templateId,templateName){
+            $scope.allobjs="";
+
             var allObjectsJson={};
             var eachObjs=[];
             $scope.templateRender=templateName;
-            console.log(templateId);
             $http.get('/templateEvents/getTemplate/?templateId='+templateId).then(function(templateObject){
-                console.log(templateObject);
-                console.log(templateObject.data[0].template);
+
               $scope.templateToRender=JSON.parse(templateObject.data[0].template);
                 console.log($scope.objectData);
 
@@ -201,9 +196,8 @@ var app=angular.module('content-tool',[])
                   })
                     eachObjs.push(allObjectsJson);
                  })
-                console.log(allObjectsJson);
                 $scope.allobjs=eachObjs;
-                $('#renderedInTemplate').append(allObjectsJson);
+               // $('#renderedInTemplate').append(allObjectsJson);
             },function(err){
                 throw err;
             })
@@ -211,6 +205,14 @@ var app=angular.module('content-tool',[])
         }
 
 
-    }]);
+        $scope.sort=function(){
+            $http.post('objectEvents/edit/sort',$scope.objectData).then(function(data){
+                alert("Sorted");
+            },function(err){
+                throw err;
+            })
+        }
 
+
+    }]);
 

@@ -53,6 +53,10 @@ router.post('/',function(req,res,next){
 
 router.get('/delete',function(req,res,next){
     collectionModel.collectionSchema.remove({_id:req.query.collectionId},function(err,obj){
+
+
+    })
+    collectionModel.objSchema.remove({collectionId:req.query.collectionId},function(err,obj){
         if(err){
 
             throw err;

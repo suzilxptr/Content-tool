@@ -21,7 +21,7 @@ var collectionModel=require('../models/collections');
 
 router.get('/',function(req,res,next){
     console.log(req.query);
-    collectionModel.objSchema.find({collectionId:req.query.collectionId},function(err, data){
+    collectionModel.objSchema.find({collectionId:req.query.collectionId}).sort({index:1}).exec(function(err, data){
         console.log(data);
         if (data.length >0){
         res.send(data);
@@ -83,6 +83,18 @@ router.post('/edit',function(req,res,next){
         }
 
     })
+
+})
+router.post('/edit/sort',function(req,res,next){
+    for(var i=0; i<req.body.length; i++){
+        collectionModel.objSchema.findByIdAndUpdate({_id:req.body[i]._id},{index:req.body[i].index},function(err,obj){
+        })
+
+    }
+
+    res.send(res.body);
+
+
 
 })
 

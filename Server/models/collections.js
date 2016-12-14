@@ -7,6 +7,7 @@ var mongoose = require( 'mongoose' );
 
 var objSchema = new mongoose.Schema({
     collectionId:String, //reference to a collection
+    index:Number, //for sorting
     src:String,
     src_2:String,
     alt:String,
