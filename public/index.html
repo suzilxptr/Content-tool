@@ -180,7 +180,7 @@
                                         <input class="form-control" id="name" ng-model="name" placeholder="Enter your collection" required="" type="text">
                                     </div>
                                 </div>
-                                <button  href="" class="btn btn-primary"  id= "btn-add-new-collection" type="submit" ng-click="newCollection()" data-dismiss="modal">Add new collection</button>
+                                <button  href="" class="btn btn-primary"  id= "btn-add-new-collection" type="submit" ng-click="newCollection()" >Add new collection</button>
                             </form>
 
                         </div>
@@ -210,7 +210,7 @@
 
 
                             <div class="modal-footer">
-                                <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                                <button class="btn btn-default"  type="button">Close</button>
                                 <button class="btn btn-primary" type="button">Add new collection</button>
                             </div>
                         </div>
@@ -354,7 +354,7 @@
             </div>
 
 
-                  <div class="modal fade" id="edit-template-modal" role="dialog">
+                  <form class="modal fade" id="edit-template-modal" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -367,29 +367,29 @@
 
                         <div class="modal-body">
                             <div id="template-edit">
+                                <form>
                                 <div class="form-group">
                                     <label for="input-template-name">Enter template name</label>
-                                    <input  type="text" class="form-control input-group-sm" ng-model="editName">
+                                    <input  type="text" class="form-control input-group-sm" ng-model="editName" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="textarea-template-data">Enter a template</label>
 
-                                    <textarea class="form-control"  ng-model="edittedTemplate" ></textarea>
+                                    <textarea class="form-control"  ng-model="edittedTemplate"  required></textarea>
                                 </div>
-                            </div>
-                                
-                            </div>
-                     
 
+                                    </form>
+                            </div>
 
+                            </div>
                         <div class="modal-footer">
-                             <button class="btn btn-primary"  data-dismiss="modal" id= "btn-edit-template-save" type="submit" ng-click="editTemplate()">Save Changes </button>
+                             <input class="btn btn-primary"  type="submit" value="Save"  id= "btn-edit-template-save" ng-click="editTemplate()"/>
                             
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
 
     </div>
 

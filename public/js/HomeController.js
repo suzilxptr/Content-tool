@@ -48,7 +48,7 @@ var app=angular.module('content-tool',['ui.sortable'])
             if($scope.name!=undefined && $scope.name!=""){
             $http.post('/collectionEvents',{name:$scope.name}).then(function(obj){
               $scope.allCollection.push(obj.data.data);
-
+                $('#add-new-collection-modal').hide();
             },function(err){
                 throw err;
             })
@@ -179,6 +179,7 @@ var app=angular.module('content-tool',['ui.sortable'])
             $http.post('/templateEvents',{"name":$scope.name,"template":$scope.template}).then(function(newTemplate){
 
                 $scope.templateObj.push(newTemplate.data.data);
+              $('#new-collection-input-modal').hide();
             },function(err){
                 throw err;
             })
@@ -215,12 +216,14 @@ var app=angular.module('content-tool',['ui.sortable'])
             if($scope.editName!=undefined && $scope.edittedTemplate!=undefined && $scope.editName!="" && $scope.edittedTemplate!="" ){
             $http.post('/templateEvents/edit',{"templateId":$scope.templateId,"name":$scope.editName,"template":$scope.edittedTemplate}).then(function(data){
                 $scope.loadTemplate();
+                $('#edit-template-modal').hide();
             },function(err){
                 throw err;
             })
         }
             else{
                 alert("Enter all fields");
+
             }
         }
 
