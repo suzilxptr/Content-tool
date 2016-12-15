@@ -45,7 +45,7 @@ var app=angular.module('content-tool',['ui.sortable'])
         }
 
         $scope.newCollection=function(event){
-
+            if($scope.name!=undefined && $scope.name!=""){
             $http.post('/collectionEvents',{name:$scope.name}).then(function(obj){
               $scope.allCollection.push(obj.data.data);
 
@@ -53,6 +53,10 @@ var app=angular.module('content-tool',['ui.sortable'])
                 throw err;
             })
             $scope.name="";
+        }
+            else{
+                alert("Enter all fields");
+            }
         }
 
        function sort(){
@@ -64,15 +68,23 @@ var app=angular.module('content-tool',['ui.sortable'])
        }
 
 
-       $scope.editCollection=function(){
-            $http.post('/collectionEvents/edit',{name:$scope.editedName,collectionId:$scope.collectionId}).then(function(obj){
-              $scope.loadCollection();
-            },function(err){
-                throw err;
-            })
-            $scope.name="";
-        }
+       $scope.editCollection=function() {
+           if ($scope.editedName != undefined && $scope.editedName != "") {
+               $http.post('/collectionEvents/edit', {
+                   name: $scope.editedName,
+                   collectionId: $scope.collectionId
+               }).then(function (obj) {
+                   $scope.loadCollection();
+               }, function (err) {
+                   throw err;
+               })
+               $scope.name = "";
+           }
 
+           else {
+               alert("Enter all fields");
+           }
+       }
 
         $scope.edit=function(collectionId,collectionName) {
             $scope.collectionId = collectionId;
@@ -162,13 +174,18 @@ var app=angular.module('content-tool',['ui.sortable'])
         }
 
         $scope.addTemplate=function(){
-
+            console.log($scope.name);
+            if($scope.name!=undefined && $scope.template!=undefined && $scope.name!="" && $scope.template!=""){
             $http.post('/templateEvents',{"name":$scope.name,"template":$scope.template}).then(function(newTemplate){
 
                 $scope.templateObj.push(newTemplate.data.data);
             },function(err){
                 throw err;
             })
+            }
+            else{
+               alert("Enter all fields");
+            }
 
         }
         $scope.deleteTemplate=function(templateId,array,index){
@@ -195,17 +212,20 @@ var app=angular.module('content-tool',['ui.sortable'])
 
         }
         $scope.editTemplate=function(){
-
+            if($scope.editName!=undefined && $scope.edittedTemplate!=undefined && $scope.editName!="" && $scope.edittedTemplate!="" ){
             $http.post('/templateEvents/edit',{"templateId":$scope.templateId,"name":$scope.editName,"template":$scope.edittedTemplate}).then(function(data){
                 $scope.loadTemplate();
             },function(err){
                 throw err;
             })
         }
+            else{
+                alert("Enter all fields");
+            }
+        }
 
        $scope.renderObjectInTemplate=function(templateId,templateName){
            $scope.allobjs="";
-           var eachObjs=[];
            $scope.templateRender=templateName;
            $http.get('/templateEvents/getTemplate/?templateId='+templateId).then(function(templateObject){
                $scope.templateToRender=templateObject.data[0].template;
