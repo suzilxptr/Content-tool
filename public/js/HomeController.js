@@ -138,7 +138,7 @@ var app=angular.module('content-tool',['ui.sortable'])
         function defaultValueSet(obj){
 
             for(value in $scope.object){
-                console.log(value);
+
                 if(obj[value]!=null){
                     $("#"+ value).attr("value", obj[value]);
                 }
@@ -154,7 +154,8 @@ var app=angular.module('content-tool',['ui.sortable'])
             currentObject.objectId=$scope.objectId;
             for(item in currentObject){}
             $http.post('/objectEvents/edit',currentObject).then(function(data){
-                console.log(data);
+
+
             },function(err){
                 throw err;
             })
@@ -218,12 +219,12 @@ var app=angular.module('content-tool',['ui.sortable'])
 
                        }
                        template=template.replace(s, value);
-                       // console.log(template);
+
                    });
 
                    template=template+"\n";
                    $scope.allobjs+=template;
-                   console.log(eachObjs);
+
                });
 
 
