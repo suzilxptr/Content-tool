@@ -179,7 +179,7 @@ var app=angular.module('content-tool',['ui.sortable'])
             $http.post('/templateEvents',{"name":$scope.name,"template":$scope.template}).then(function(newTemplate){
 
                 $scope.templateObj.push(newTemplate.data.data);
-              $('#new-collection-input-modal').hide();
+              $('#new-template-input-modal').hide();
             },function(err){
                 throw err;
             })
