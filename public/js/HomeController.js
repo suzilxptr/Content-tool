@@ -129,8 +129,20 @@ var app=angular.module('content-tool',['ui.sortable'])
         $scope.objectIdset=function(objectId,$index){
             $scope.objectId=objectId;
             $scope.index=$index;
-            //defaultValueSet($scope.objectData[$index]);
+            defaultValueSet($scope.objectData[$index]);
 
+
+
+        }
+
+        function defaultValueSet(obj){
+
+            for(value in $scope.object){
+                console.log(value);
+                if(obj[value]!=null){
+                    $("#"+ value).attr("value", obj[value]);
+                }
+            }
 
         }
         $scope.editObject=function(){
@@ -190,27 +202,36 @@ var app=angular.module('content-tool',['ui.sortable'])
             })
         }
 
-        $scope.renderObjectInTemplate=function(templateId,templateName){
-            $scope.allobjs="";
-            var eachObjs=[];
-            $scope.templateRender=templateName;
-            $http.get('/templateEvents/getTemplate/?templateId='+templateId).then(function(templateObject){
-              $scope.templateToRender=templateObject.data[0].template;
-                angular.forEach(($scope.objectData), function(obj){
-                    var template=$scope.templateToRender;
-                                angular.forEach(obj,function(key,value){
-                                   var s=value.toUpperCase();
-                                    template=template.replace("{{"+s+"}}", key);
-                                })
-                                eachObjs.push(template);
-                 })
+       $scope.renderObjectInTemplate=function(templateId,templateName){
+           $scope.allobjs="";
+           var eachObjs=[];
+           $scope.templateRender=templateName;
+           $http.get('/templateEvents/getTemplate/?templateId='+templateId).then(function(templateObject){
+               $scope.templateToRender=templateObject.data[0].template;
+               angular.forEach(($scope.objectData), function(obj){
+                   var template=$scope.templateToRender;
 
-                $scope.allobjs=eachObjs;
-            },function(err){
-                throw err;
-            })
+                   angular.forEach(obj,function(value,key){
+                       var s='{{'+key.toUpperCase()+'}}';
+                       if (typeof value === 'string' || value instanceof String){
+                           value=value.replace(/"/g, '\\"');
 
-        }
+                       }
+                       template=template.replace(s, value);
+                       // console.log(template);
+                   });
+
+                   template=template+"\n";
+                   $scope.allobjs+=template;
+                   console.log(eachObjs);
+               });
+
+
+           },function(err){
+               throw err;
+           });
+
+       }
 
 
 

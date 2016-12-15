@@ -64,6 +64,6 @@ body {
 
 .as-sortable-hidden {
 }
-.modal-body{
+.modal-body,.col-md-5{
     overflow-y: scroll;
 }

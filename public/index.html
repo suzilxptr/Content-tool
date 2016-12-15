@@ -310,7 +310,8 @@
                                 <div class="form-group"  ng-repeat="(x,y) in object" >
 
                                     <label for="{{x}}">{{x}}:</label>
-                                    <input type="text" class="form-control" id="{{x}}"  >
+                                    <input type="text" class="form-control" id="{{x}}"  ng-if="x!='img_num'">
+                                    <input type="number" class="form-control" id="{{x}}"  ng-if="x==='img_num'">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -408,7 +409,8 @@
                                     <div id="sortable_1">
                                              <div class="form-group"  ng-repeat="(x,y) in object" >
                                             <div> <label for="{{x}}">{{x}}:</label>
-                                             <input type="text" class="form-control" id="{{x}}"  /></div>
+                                                <input type="text" class="form-control" id="{{x}}"  ng-if="x!='img_num'">
+                                                <input type="number" class="form-control" id="{{x}}"  ng-if="x==='img_num'">
                                      </div>
                                     </div>
                         </div>
