@@ -81,7 +81,6 @@
 
                     
                 </div>
-{{template}}
 
                 <div class="col-md-5 col-md-offset-1" id="templates-playground" ng-init="loadTemplate()">
                     <button class="btn btn-success small pull-right" data-target="#new-template-input-modal" data-toggle="modal" >+New</button>
@@ -153,7 +152,7 @@
 
                         <div class="modal-footer">
                             <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
-                            <button  id="btn-add-new-template" data-dismiss="modal" class="btn btn-primary"  ng-click="addTemplate()">Add new template</button>
+                            <button  id="btn-add-new-template"  class="btn btn-primary"  ng-click="addTemplate()">Add new template</button>
                         </div>
                     </div>
                 </div>
@@ -311,7 +310,7 @@
 
                                     <label for="{{x}}">{{x}}:</label>
                                     <input type="text" class="form-control" id="{{x}}"  ng-if="x!='img_num'">
-                                    <input type="number" class="form-control" id="{{x}}"  ng-if="x==='img_num'">
+                                    <input type="text" class="form-control" id="{{x}}"  ng-if="x==='img_num'">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -337,9 +336,7 @@
 
                         <div class="modal-body">
 
-                                <textarea rows="10" cols="75"  id="renderedInTemplate" >
-                                    {{allobjs}}
-</textarea>
+                                <textarea rows="10" cols="75"  id="renderedInTemplate" >{{allobjs}}</textarea>
                             <hr>
                         </div>
 
@@ -370,7 +367,7 @@
                                 <form>
                                 <div class="form-group">
                                     <label for="input-template-name">Enter template name</label>
-                                    <input  type="text" class="form-control input-group-sm" ng-model="editName" required>
+                                    <input  type="text" class="form-control input-group-sm" ng-model="editName"  required>
                                 </div>
 
                                 <div class="form-group">
@@ -402,7 +399,7 @@
                     <div class="modal-header">
                             <button class="close" data-dismiss="modal" type="button">&times;</button>
 
-                            <h4 id="edit-collection-header" class="modal-title">Add object/h4>
+                            <h4 id="edit-collection-header" class="modal-title">Add object</h4>
                     </div>
                         
                         <div class="modal-body">
@@ -410,7 +407,7 @@
                                              <div class="form-group"  ng-repeat="(x,y) in object" >
                                             <div> <label for="{{x}}">{{x}}:</label>
                                                 <input type="text" class="form-control" id="{{x}}"  ng-if="x!='img_num'">
-                                                <input type="number" class="form-control" id="{{x}}"  ng-if="x==='img_num'">
+                                                <input type="text" class="form-control" id="{{x}}"  ng-if="x==='img_num'">
                                      </div>
                                     </div>
                         </div>
@@ -426,17 +423,7 @@
                 
                 
             </div>
-            <script>
-                $(".modal-dialog").draggable({
-                    handle: ".modal-header"
-                });
-                $( "form" ).on( "submit", function( event ) {
-                    event.preventDefault();
-                    console.log("herer");
-                    console.log( $( this ).serialize() );
-                });
-
-            </script>
+           
 
 
 </html>
