@@ -1,5 +1,3 @@
-
-
 var app=angular.module('content-tool',['ui.sortable'])
 
 app.controller('IndexController', ['$scope','$http', function($scope, $http) {
@@ -121,10 +119,18 @@ app.controller('IndexController', ['$scope','$http', function($scope, $http) {
         $("#sortable_1 :input").each(function (inputElement,value) {
             currentObject[this.id] = $(value).val();
         });
+
+        for(value in $scope.object){
+
+            $("#sortable_1 :input").each(function (inputElement,value){
+                $(value).val("");
+            });
+        }
         currentObject.collectionId=$scope.collectionId;
         currentObject.index=null;
         $http.post('/objectEvents',currentObject).then(function(obj){
             $scope.objectData.push(obj.data.data);
+
         },function(err){
             throw err;
         })
@@ -133,31 +139,28 @@ app.controller('IndexController', ['$scope','$http', function($scope, $http) {
         $scope.objectId=objectId;
         $scope.index=$index;
         defaultValueSet($scope.objectData[$index]);
-
-
-
     }
 
-    function defaultValueSet(obj){
-
-        for(value in $scope.object){
-
-            if(obj[value]!=null){
-                $("#"+ value).attr("value", obj[value]);
+        function defaultValueSet(obj){
+            for (value in $scope.object) {
+                if (obj[value] != null) {
+                    $("#sortable").find("#" + value).val(obj[value]);
+                }
             }
         }
 
-    }
+
     $scope.editObject=function(){
         var currentObject={};
         $("#sortable :input").each(function (inputElement,value) {
             currentObject[this.id] = $(value).val();
+            $(value).val("");
         });
 
         currentObject.objectId=$scope.objectId;
         for(item in currentObject){}
         $http.post('/objectEvents/edit',currentObject).then(function(data){
-
+            $scope.edit($scope.collectionId,$scope.collectionName);
 
         },function(err){
             throw err;
@@ -165,7 +168,7 @@ app.controller('IndexController', ['$scope','$http', function($scope, $http) {
     }
 
     $scope.addTemplate=function(){
-        console.log($scope.name);
+
         if($scope.name!=undefined && $scope.template!=undefined && $scope.name!="" && $scope.template!=""){
             $http.post('/templateEvents',{"name":$scope.name,"template":$scope.template}).then(function(newTemplate){
 
